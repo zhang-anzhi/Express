@@ -81,16 +81,16 @@ class Search(tkinter.Frame):
         tkinter.Label(self, text=constant.SEARCH_HELP, font=('宋体', 24)).pack()
 
     def set_table(self):
-        # 清理
+        # Clean
         self.table.delete(*self.table.get_children())
 
-        # 仅显示未领取
+        # Only display not taken
         if self.not_taken_mode:
             data = self.database.express.list_not_taken()
         else:
             data = self.database.express.list_all()
 
-        # 插入
+        # Insert into table
         for i in data:
             date = time.strftime('%Y-%m-%d', time.localtime(i[1]))
             status = '已取' if i[5] == 1 else '未取'
@@ -98,28 +98,36 @@ class Search(tkinter.Frame):
             self.table.insert('', 0, text=i[0], values=values)
 
     def take(self, event=None):
+        """Click take button handle, tale"""
         number = self.number_entry.get()
+        # Has number import
         if number:
-            # 查询并筛选数据
+            # Search from data
             data = [i for i in self.database.express.list_not_taken() if
                     i[4] == number]
 
-            # 判断结果
+            # Only one data
             if len(data) == 1:
                 self.database.express.take(data[0][0])
                 self.number_entry.delete(0, 'end')
                 self.set_table()
                 tkinter.messagebox.showinfo(message=f'领取成功')
+            # More than one data
             elif len(data) > 1:
                 tkinter.messagebox.showwarning(
                     message=f'查到多个运单号为"{number}"的快递，请在表中手动选择并领取')
                 self.number_entry.delete(0, 'end')
+            # No data
             else:
                 tkinter.messagebox.showerror(
                     message=f'没有运单号为"{number}"的快递')
+        # No number import
         else:
+            # Not selected table
             if not self.table.selection():
                 return tkinter.messagebox.showerror(message='请选择要领取的快递')
+
+            # Ask check take
             if tkinter.messagebox.askokcancel(
                     title='确认操作', message='请再次确认信息后点击确定'):
                 self.database.express.take(

@@ -1,18 +1,8 @@
 # -*- coding: utf-8 -*-
-import time
 import re
+from tkinter.ttk import Treeview
 
 from pypinyin import pinyin, Style
-
-
-def list_all_as_table(data):
-    for i in data:
-        print('| {} | {} | {} | {} | {} | {} |'.format(
-            i[0].ljust(36),
-            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(i[1])).ljust(10),
-            i[2].ljust(8), i[3].ljust(10),
-            str(i[4]).ljust(16), ('已取' if i[5] == 1 else '').ljust(2)
-        ))
 
 
 def screen_name(name_list, key):
@@ -32,7 +22,13 @@ def screen_name(name_list, key):
     return result
 
 
-def simplify_name_list(name_list, name_now):
+def simplify_name_list(name_list: list, name_now: str):
+    """
+    To simplify a full name list to a small list that relate to name_now
+    :param name_list: A name list.
+    :param name_now: The name that will be use to simplify, can be pinyin/character.
+    :return: The name list after simplify.
+    """
     if name_now == '':
         return [(i[0], i[1]) for i in name_list]
     elif re.fullmatch('[a-zA-z]*', name_now):
@@ -41,7 +37,11 @@ def simplify_name_list(name_list, name_now):
         return [(i[0], i[1]) for i in name_list if i[0].startswith(name_now)]
 
 
-def set_table(table, data_list):
+def set_table(table: Treeview, data_list: list):
+    """
+    :param table: A Tkinter table object will be fill in data.
+    :param data_list: The list of data, each data should be a tuple.
+    """
     table.delete(*table.get_children())
     for i in reversed(data_list):
         table.insert('', 0, text=i[0], values=i)

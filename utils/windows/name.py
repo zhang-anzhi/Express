@@ -73,6 +73,7 @@ class Name(tkinter.Frame):
         )
 
     def add(self, event=None):
+        """Click add button handle, add new person"""
         name = self.name_entry.get()
         phone = self.phone_entry.get()
         phone = None if phone == '' else phone
@@ -82,6 +83,7 @@ class Name(tkinter.Frame):
         self.set_table()
 
     def remove(self, event=None):
+        """Click remove button handle, remove selected person"""
         name = self.table.item(self.table.selection()[0])
         if tkinter.messagebox.askokcancel(
                 title='确认操作', message=f'确认删除"{name["text"]}"吗？'):

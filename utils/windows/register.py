@@ -83,23 +83,25 @@ class Register(tkinter.Frame):
                       text=constant.REGISTER_HELP, font=('宋体', 24)).pack()
 
     def register(self, event=None):
+        """Click register button handle, add new express."""
         company = self.company_combobox.get()
         name = self.name_entry.get()
         number = self.number_entry.get()
 
-        # 完整填写
+        # Full input
         if not (company and name and number):
             return self.text_var.set('请填写完整信息')
 
-        # 公司姓名填写正确
+        # Exact company name
         if company == '其它（请直接填写）' or name == '其它（请直接填写）':
             return self.text_var.set('请填写完整信息')
 
-        # 收件人未存储
+        # Receiver in the data
         if name not in [i[0] for i in self.database.name.list_all()]:
             message = f'收件人"{name}"不在数据库中，请前往收件人管理页面添加'
             return tkinter.messagebox.showinfo(title='姓名错误', message=message)
 
+        # Add express
         info = f'快递公司”{company}“，收件人“{name}”，运单号“{number}”'
         self.window_manager.database.express.add(company, name, number)
         self.text_var.set('已登记\n' + info)
@@ -117,10 +119,12 @@ class Register(tkinter.Frame):
         )
 
     def select_company(self, event):
+        """Select company handle, if is not other change focus set to number entry"""
         if self.company_combobox.get() != '其它（请直接填写）':
             self.number_entry.focus_set()
 
     def select_table(self, event):
+        """Select name table handle, to insert selected name in to name entry"""
         name = self.table.item(self.table.selection()[0])['text']
         self.name_entry.delete(0, 'end')
         self.name_entry.insert(0, name)

@@ -7,9 +7,12 @@ from utils import constant
 class About(tkinter.Tk):
     def __init__(self):
         super().__init__()
+
+        # window base info
         self.title(constant.NAME)
         self.geometry('300x200')
 
+        # About info
         name_info = f'{constant.NAME} v{constant.VERSION}'
         version_info = f'Built on {constant.BUILD_DATE}'
         self.name = tkinter.Label(self, text=name_info, font=('黑体', 20))

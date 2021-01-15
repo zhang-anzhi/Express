@@ -30,6 +30,7 @@ class Menubar(tkinter.Menu):
         self.add_cascade(label='帮助', menu=help_menu)
 
     def import_data(self):
+        """Import data method"""
         path = tkinter.filedialog.askopenfilename(
             defaultextension='.db',
             filetypes=[('数据库文件', '.db')],
@@ -52,6 +53,7 @@ class Menubar(tkinter.Menu):
                 os.remove(path)
 
     def export_data(self):
+        """Output data method"""
         path = tkinter.filedialog.asksaveasfilename(
             defaultextension='.db',
             filetypes=[('数据库文件', '.db'), ('所有文件', '.*')],
